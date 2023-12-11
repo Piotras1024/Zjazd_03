@@ -55,15 +55,15 @@ def how_many_cakes(available_ingredients: dict, cake_recipe: dict) -> int:
 
 
 def calculate_missing_ingredients(available_ingredients: dict, full_needed_ingredients: dict) -> dict:
-    ingredients_needed = {}
+    ingredients_missing = {}
     for ingredient, amount in full_needed_ingredients.items():
         if ingredient in available_ingredients:
             needed = round(amount - available_ingredients[ingredient], 2)
             if needed > 0:
-                ingredients_needed_for_next_cake[ingredient] = needed
+                ingredients_missing[ingredient] = needed
         else:
-            ingredients_needed_for_next_cake[ingredient] = amount
-    return ingredients_needed
+            ingredients_missing[ingredient] = amount
+    return ingredients_missing
 
 
 def missing_ingredients_to_next_cake(available_ingredients: dict, cake_recipe: dict) -> dict:
@@ -72,16 +72,19 @@ def missing_ingredients_to_next_cake(available_ingredients: dict, cake_recipe: d
     """
     actual_max = how_many_cakes(available_ingredients, cake_recipe)
     full_needed_ingredients = {ingredient: round(amount * (actual_max + 1), 2) for ingredient, amount in cake_recipe.items()}
-    ingredients_needed_for_next_cake = {}
-    for ingredient, amount in full_needed_ingredients.items():
-        if ingredient in available_ingredients:
-            needed = round(amount - available_ingredients[ingredient], 2)
-            if needed > 0:
-                ingredients_needed_for_next_cake[ingredient] = needed
-        else:
-            ingredients_needed_for_next_cake[ingredient] = amount
-    
-    return ingredients_needed_for_next_cake
+    ingredients_missing = calculate_missing_ingredients(available_ingredients, full_needed_ingredients)
+    return ingredients_missing
+    # def calculate_missing_ingredients - > ta funkcja zastępuje poniższy kod
+    # ingredients_needed_for_next_cake = {}
+    # for ingredient, amount in full_needed_ingredients.items():
+    #     if ingredient in available_ingredients:
+    #         needed = round(amount - available_ingredients[ingredient], 2)
+    #         if needed > 0:
+    #             ingredients_needed_for_next_cake[ingredient] = needed
+    #     else:
+    #         ingredients_needed_for_next_cake[ingredient] = amount
+    #
+    # return ingredients_needed_for_next_cake
 
 
 def missing_ingredients_to_amount_cake(available_ingredients: dict, cake_recipe: dict, number_cakes: int) -> dict:
@@ -90,15 +93,18 @@ def missing_ingredients_to_amount_cake(available_ingredients: dict, cake_recipe:
     jako parametr
     """
     full_needed_ingredients = {ingredient: round(amount * number_cakes, 2) for ingredient, amount in cake_recipe.items()}
-    ingredients_needed_for_all_cakes = {}
-    for ingredient, amount in full_needed_ingredients.items():
-        if ingredient in available:
-            needed = round(amount - available_ingredients[ingredient], 2)
-            if needed > 0:
-                ingredients_needed_for_all_cakes[ingredient] = needed
-        else:
-            ingredients_needed_for_all_cakes[ingredient] = amount
-    return ingredients_needed_for_all_cakes
+    ingredients_missing = calculate_missing_ingredients(available_ingredients, full_needed_ingredients)
+    return ingredients_missing
+    # def calculate_missing_ingredients - > ta funkcja zastępuje poniższy kod
+    # ingredients_needed_for_all_cakes = {}
+    # for ingredient, amount in full_needed_ingredients.items():
+    #     if ingredient in available_ingredients:
+    #         needed = round(amount - available_ingredients[ingredient], 2)
+    #         if needed > 0:
+    #             ingredients_needed_for_all_cakes[ingredient] = needed
+    #     else:
+    #         ingredients_needed_for_all_cakes[ingredient] = amount
+    # return ingredients_needed_for_all_cakes
 
 
 cakes = how_many_cakes(available, cake_extra)
