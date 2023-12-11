@@ -1,7 +1,24 @@
 available = {'mleko': 3, 'jajko': 25, 'maka': 3, 'cukier': 4, 'maliny': 3}
 cake = {'mleko': 1, 'jajko': 12, 'maka': 0.5, 'cukier': 0.3}
-cake_extra = {'mleko': 1, 'jajko': 0.5, 'maka': 1, 'maliny': 0.6}
+cake_extra = {'mleko': 1, 'jajko': 0.5, 'maka': 1, 'maliny': 2.6}
 cake_super = {'mleko': 1.2, 'jajko': 1, 'maka': 1.6}
+
+
+def the_most_critical_ingredient(missing_ingredients: dict) -> str:
+    list_of_critical_ingredients = []
+    min_amount = min(missing_ingredients.values())
+    if min_amount <= 1:
+        answer = f"Brakuje {min_amount} jednostki takich artykółów jak :"
+    else:
+        answer = f"Brakuje {min_amount} jednostek :"
+
+    for ingredient, amount in missing_ingredients.items():
+        if amount == min_amount:
+            list_of_critical_ingredients.append(ingredient)
+    for ingredient in list_of_critical_ingredients:
+        answer = answer + f"\n- {ingredient}"
+    answer = answer + "."
+    return answer
 
 
 def how_many_cakes_to_use_all_available(available_ingredients: dict, cake_recipe: dict) -> int:
@@ -74,6 +91,7 @@ def missing_ingredients_to_next_cake(available_ingredients: dict, cake_recipe: d
     full_needed_ingredients = {ingredient: round(amount * (actual_max + 1), 2) for ingredient, amount in cake_recipe.items()}
     ingredients_missing = calculate_missing_ingredients(available_ingredients, full_needed_ingredients)
     return ingredients_missing
+
     # def calculate_missing_ingredients - > ta funkcja zastępuje poniższy kod
     # ingredients_needed_for_next_cake = {}
     # for ingredient, amount in full_needed_ingredients.items():
@@ -95,6 +113,7 @@ def missing_ingredients_to_amount_cake(available_ingredients: dict, cake_recipe:
     full_needed_ingredients = {ingredient: round(amount * number_cakes, 2) for ingredient, amount in cake_recipe.items()}
     ingredients_missing = calculate_missing_ingredients(available_ingredients, full_needed_ingredients)
     return ingredients_missing
+
     # def calculate_missing_ingredients - > ta funkcja zastępuje poniższy kod
     # ingredients_needed_for_all_cakes = {}
     # for ingredient, amount in full_needed_ingredients.items():
@@ -112,9 +131,12 @@ missing_ingr = missing_ingredients_to_next_cake(available, cake_extra)
 missing_ingr_amount = missing_ingredients_to_amount_cake(available, cake_extra, 12)
 how_many_cakes_to_use_all = how_many_cakes_to_use_all_available(available, cake_extra)
 missing_ingr_to_use_all = missing_ingredients_to_use_all_available(available, cake_extra)
+
 print(cakes)
 print(missing_ingr)
 print(missing_ingr_amount)
 print()
 print(how_many_cakes_to_use_all)
 print(missing_ingr_to_use_all)
+
+print(the_most_critical_ingredient(missing_ingr))
