@@ -1,10 +1,10 @@
-available = {'mleko': 3, 'jajko': 25, 'maka': 7, 'cukier': 4, 'maliny': 3}
+available = {'mleko': 3, 'jajko': 25, 'maka': 3, 'cukier': 4, 'maliny': 3}
 cake = {'mleko': 1, 'jajko': 12, 'maka': 0.5, 'cukier': 0.3}
-cake_extra = {'mleko': 0.8, 'jajko': 0.5, 'maka': 2, 'maliny': 0.6}
+cake_extra = {'mleko': 1, 'jajko': 0.5, 'maka': 1, 'maliny': 0.6}
 cake_super = {'mleko': 1.2, 'jajko': 1, 'maka': 1.6}
 
 
-def how_many_cakes_to_use_all_available(available_ingredients: dict, cake_recipe:dict) -> int:
+def how_many_cakes_to_use_all_available(available_ingredients: dict, cake_recipe: dict) -> int:
     """
     Oblicza maksymalną liczbę ciast, które można zrobić, wykorzystując całą dostępną ilość każdego
     składnika. Zwraca liczbę ciast opartą na składniku, którego jest najwięcej w stosunku do wymagań
@@ -19,7 +19,8 @@ def how_many_cakes_to_use_all_available(available_ingredients: dict, cake_recipe
             continue
     return int(max((dict_cakes_from_ingredient.values())))
 
-def missing_ingredients_to_use_all_available(available_ingredients: dict, cake_recipe:dict) -> dict:
+
+def missing_ingredients_to_use_all_available(available_ingredients: dict, cake_recipe: dict) -> dict:
     """
     Zwraca brakujące składniki, aby zrobić maksymalną liczbę ciast, które wykorzystują całą dostępną
     ilość każdego składnika.
@@ -37,6 +38,7 @@ def missing_ingredients_to_use_all_available(available_ingredients: dict, cake_r
 
     return ingredients_needed_for_max_cakes
 
+
 def how_many_cakes(available_ingredients: dict, cake_recipe: dict) -> int:
     """
     Zwraca ile ciast można zrobić z dostępnych składników
@@ -48,8 +50,21 @@ def how_many_cakes(available_ingredients: dict, cake_recipe: dict) -> int:
             dict_cakes_from_ingredient[ingredient] = counting
         else:
             # Jeśli nie ma składnika, nie można zrobić ciasta
-            return 0, {}
+            return 0
     return int(min((dict_cakes_from_ingredient.values())))
+
+
+def calculate_missing_ingredients(available_ingredients: dict, full_needed_ingredients: dict) -> dict:
+    ingredients_needed = {}
+    for ingredient, amount in full_needed_ingredients.items():
+        if ingredient in available_ingredients:
+            needed = round(amount - available_ingredients[ingredient], 2)
+            if needed > 0:
+                ingredients_needed_for_next_cake[ingredient] = needed
+        else:
+            ingredients_needed_for_next_cake[ingredient] = amount
+    return ingredients_needed
+
 
 def missing_ingredients_to_next_cake(available_ingredients: dict, cake_recipe: dict) -> dict:
     """
@@ -59,14 +74,15 @@ def missing_ingredients_to_next_cake(available_ingredients: dict, cake_recipe: d
     full_needed_ingredients = {ingredient: round(amount * (actual_max + 1), 2) for ingredient, amount in cake_recipe.items()}
     ingredients_needed_for_next_cake = {}
     for ingredient, amount in full_needed_ingredients.items():
-        if ingredient in available:
-            needed = round(amount - available[ingredient], 2)
+        if ingredient in available_ingredients:
+            needed = round(amount - available_ingredients[ingredient], 2)
             if needed > 0:
                 ingredients_needed_for_next_cake[ingredient] = needed
         else:
             ingredients_needed_for_next_cake[ingredient] = amount
     
     return ingredients_needed_for_next_cake
+
 
 def missing_ingredients_to_amount_cake(available_ingredients: dict, cake_recipe: dict, number_cakes: int) -> dict:
     """
@@ -77,14 +93,12 @@ def missing_ingredients_to_amount_cake(available_ingredients: dict, cake_recipe:
     ingredients_needed_for_all_cakes = {}
     for ingredient, amount in full_needed_ingredients.items():
         if ingredient in available:
-            needed = round(amount - available[ingredient], 2)
+            needed = round(amount - available_ingredients[ingredient], 2)
             if needed > 0:
                 ingredients_needed_for_all_cakes[ingredient] = needed
         else:
             ingredients_needed_for_all_cakes[ingredient] = amount
     return ingredients_needed_for_all_cakes
-
-
 
 
 cakes = how_many_cakes(available, cake_extra)
