@@ -12,6 +12,7 @@ from funkcje_do_czytanie_danych_z_pliku import *
 
 content = clear_text(content)
 content = make_split(content)
+print(content)
 
 print(counting_words_in_list(content))
 print(counting_unique_words_in_string(content))
